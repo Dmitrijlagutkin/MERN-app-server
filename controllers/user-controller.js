@@ -1,6 +1,7 @@
 const userService = require("../service/user-service")
 const { validationResult } = require("express-validator")
 const ApiError = require("../exceptions/api-error")
+const UserModel = require("../models/user-model")
 class UserController {
     async registration(req, res, next) {
         try {
@@ -74,9 +75,12 @@ class UserController {
         }
     }
 
-    async getUser(req, res, next) {
+    async getUserData(req, res, next) {
         try {
-            res.json(["123", "456"])
+            const { email } = req.body
+            const { id } = await UserModel.findById(req.user._id)
+            const userData = await userService.getUserData(id)
+            return res.json(userData)
         } catch (e) {
             next(e)
         }

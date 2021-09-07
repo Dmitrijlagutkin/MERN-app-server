@@ -90,6 +90,18 @@ class UserService {
             user: userDto,
         }
     }
+
+    async getUserData(id) {
+        const userData = await UserModel.findById(id).populate({
+            path: "lists",
+            model: "List",
+            populate: {
+                path: "listItem",
+                model: "ListItem",
+            },
+        })
+        return userData
+    }
 }
 
 module.exports = new UserService()

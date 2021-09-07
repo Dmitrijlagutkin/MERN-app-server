@@ -3,7 +3,9 @@ const express = require("express")
 const cors = require("cors")
 const cookieParser = require("cookie-parser")
 const mongoose = require("mongoose")
-const router = require("./router/index")
+const authRoutes = require("./router/auth-routes")
+const listRoutes = require("./router/list-routes")
+const listItemRoutes = require("./router/listItem-routes")
 const errorMiddleware = require("./middlewares/error-middleware")
 const ApiError = require("./exceptions/api-error")
 
@@ -13,7 +15,7 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors())
-app.use("/api", router)
+app.use("/api", authRoutes, listRoutes, listItemRoutes)
 app.use(errorMiddleware)
 
 const start = async () => {
@@ -21,6 +23,7 @@ const start = async () => {
         await mongoose.connect(process.env.DB_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            useFindAndModify: false,
         })
         app.listen(PORT, () => console.log(`server started on PORT ${PORT}`))
     } catch (e) {
