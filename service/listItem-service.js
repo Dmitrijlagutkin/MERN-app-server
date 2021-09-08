@@ -3,10 +3,14 @@ const ListItemModel = require("../models/listItem-model")
 const UserModel = require("../models/user-model")
 
 class ListItemService {
-    async addListItem(name, listId, userId) {
+    async addListItem(name, option, listId) {
         const list = await ListModel.findById(listId)
+        if (!list) {
+            throw ApiError.BadRequest(`List not found`)
+        }
         const listItemData = await ListItemModel.create({
             name,
+            option,
             listId,
         })
         list.listItem.push(listItemData._id)
@@ -17,26 +21,23 @@ class ListItemService {
         }
     }
 
-    async updateListItem(listTitle, listItem, id) {
-        const listData = await ListModel.findByIdAndUpdate(
+    async updateListItem(name, option, listId, id) {
+        const listItemData = await ListItemModel.findByIdAndUpdate(
             { _id: id },
             {
-                listTitle,
-                ...listItem,
+                name,
+                option,
+                listId,
             },
             { new: true }
         )
         return {
-            listData,
+            listItemData,
         }
     }
 
-    async deleteListItem(id, userId) {
-        await ListModel.findByIdAndDelete(id)
-
-        const user = await UserModel.findById(userId)
-        await user.lists.splice(user.lists.indexOf(id), 1)
-        await user.save()
+    async deleteListItem(id, listId) {
+        await ListItemModel.findByIdAndDelete(id)
     }
 }
 

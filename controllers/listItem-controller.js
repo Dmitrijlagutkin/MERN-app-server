@@ -3,13 +3,11 @@ const listItemService = require("../service/listItem-service")
 class ListItemController {
     async addListItem(req, res, next) {
         try {
-            const { name, listId } = req.body
-            const userId = req.user._id
-
+            const { name, option, listId } = req.body
             const listItemData = await listItemService.addListItem(
                 name,
-                listId,
-                userId
+                option,
+                listId
             )
             return res.json(listItemData)
         } catch (e) {
@@ -19,14 +17,15 @@ class ListItemController {
 
     async updateListItem(req, res, next) {
         try {
-            const { listTitle, listItem } = req.body
+            const { name, option, listId } = req.body
             const { id } = req.params
-            const listData = await listService.updateList(
-                listTitle,
-                listItem,
+            const listItemData = await listItemService.updateListItem(
+                name,
+                option,
+                listId,
                 id
             )
-            return res.json(listData)
+            return res.json(listItemData)
         } catch (e) {
             next(e)
         }
@@ -40,9 +39,10 @@ class ListItemController {
     async deleteListItem(req, res, next) {
         try {
             const { id } = req.params
-            const userId = req.user._id
-            await listService.deleteList(id, userId)
-            return res.json({ message: "Category was deleted" })
+            // const {listId} = req.body
+            // const userId = req.user._id
+            await listItemService.deleteListItem(id)
+            return res.json({ message: "ListItem was deleted" })
         } catch (e) {
             next(e)
         }

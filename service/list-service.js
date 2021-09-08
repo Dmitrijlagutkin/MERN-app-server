@@ -1,9 +1,12 @@
 const ListModel = require("../models/list-model")
 const UserModel = require("../models/user-model")
-
+const ApiError = require("../exceptions/api-error")
 class ListService {
     async addList(listTitle, listItem, userId) {
         const user = await UserModel.findById(userId)
+        if (!user) {
+            throw ApiError.BadRequest(`User not found`)
+        }
         const listData = await ListModel.create({
             listTitle,
             ...listItem,
@@ -32,8 +35,10 @@ class ListService {
 
     async deleteList(id, userId) {
         await ListModel.findByIdAndDelete(id)
-
         const user = await UserModel.findById(userId)
+        if (!user) {
+            throw ApiError.BadRequest(`User not found`)
+        }
         await user.lists.splice(user.lists.indexOf(id), 1)
         await user.save()
     }
