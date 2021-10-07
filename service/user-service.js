@@ -95,10 +95,10 @@ class UserService {
         const userData = await UserModel.findById(id).populate({
             path: "lists",
             model: "List",
-            populate: {
-                path: "listItem",
-                model: "ListItem",
-            },
+            // populate: {
+            //     path: "listItem",
+            //     model: "ListItem",
+            // },
         })
         return userData
     }

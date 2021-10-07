@@ -4,7 +4,8 @@ const List = new Schema({
     listTitle: { type: String, required: true },
     date: { type: String, required: true },
     category: { type: String},
-    listItem: [{ type: Schema.Types.ObjectId, ref: "ListItem" }],
+    listItem: [{}],
+    isFavorites: {type: Boolean, default: false}
 })
 
 module.exports = model("List", List)

@@ -2,7 +2,7 @@ const ListModel = require("../models/list-model")
 const UserModel = require("../models/user-model")
 const ApiError = require("../exceptions/api-error")
 class ListService {
-    async addList(listTitle, date, category, listItem, userId) {
+    async addList(listTitle, date, category, listItem, isFavorites, userId) {
         const user = await UserModel.findById(userId)
         if (!user) {
             throw ApiError.BadRequest(`User not found`)
@@ -11,7 +11,8 @@ class ListService {
             listTitle,
             date,
             category,
-            ...listItem,
+            listItem,
+            isFavorites
         })
         user.lists.push(listData._id)
         await user.save()
@@ -28,7 +29,8 @@ class ListService {
                 listTitle,
                 date,
                 category,
-                ...listItem,
+                listItem,
+                isFavorites
             },
             { new: true }
         )
