@@ -3,11 +3,13 @@ const listService = require("../service/list-service")
 class ListController {
     async addList(req, res, next) {
         try {
-            const { listTitle, listItem } = req.body
+            const { listTitle, date, category, listItem } = req.body
             const userId = req.user._id
-
+            console.log("category", category)
             const listData = await listService.addList(
                 listTitle,
+                date,
+                category,
                 listItem,
                 userId
             )
@@ -19,10 +21,12 @@ class ListController {
 
     async updateList(req, res, next) {
         try {
-            const { listTitle, listItem } = req.body
+            const { listTitle, date, category, listItem } = req.body
             const { id } = req.params
             const listData = await listService.updateList(
                 listTitle,
+                date,
+                category,
                 listItem,
                 id
             )
