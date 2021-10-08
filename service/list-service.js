@@ -22,7 +22,7 @@ class ListService {
         }
     }
 
-    async updateList(listTitle, date, category, listItem, id) {
+    async updateList(listTitle, date, category, listItem, isFavorites, id) {
         const listData = await ListModel.findByIdAndUpdate(
             { _id: id },
             {

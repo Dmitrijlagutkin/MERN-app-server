@@ -5,7 +5,6 @@ class ListController {
         try {
             const { listTitle, date, category, listItem, isFavorites } = req.body
             const userId = req.user._id
-            console.log("listItem", listItem)
             const listData = await listService.addList(
                 listTitle,
                 date,
@@ -24,6 +23,8 @@ class ListController {
         try {
             const { listTitle, date, category, listItem, isFavorites } = req.body
             const { id } = req.params
+            console.log("id", id)
+            console.log("req.params", req.params)
             const listData = await listService.updateList(
                 listTitle,
                 date,
